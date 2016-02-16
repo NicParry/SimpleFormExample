@@ -1,5 +1,9 @@
 {
   "autoload": {
     "psr-4": {"SimpleForm\\": "src/"}
+  },
+  "require-dev": {
+    "fabpot/goutte": "^3.1",
+    "phpunit/phpunit": "^4.8"
   }
 }
