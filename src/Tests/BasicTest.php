@@ -7,11 +7,10 @@ use Goutte\Client;
 
 class BasicTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testFirst()
+    public function testFormIsDisplayed()
     {
         $client = new Client();
-        $client->request('GET', 'http://localhost');
-        $this->assertEquals('Dummy index.php output', $client->getResponse()->getContent());
+        $crawler = $client->request('GET', 'http://localhost');
+        $this->assertCount(1, $crawler->filter('form'));
     }
 }
