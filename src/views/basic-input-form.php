@@ -3,6 +3,9 @@
 
 </head>
 <body>
+<?php if ($message) {?>
+    <div class="message"><?php echo $message; ?></div>
+<?php }?>
 <form method="post">
     <table>
         <tr>

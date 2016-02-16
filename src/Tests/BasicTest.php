@@ -13,4 +13,14 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $crawler = $client->request('GET', 'http://localhost');
         $this->assertCount(1, $crawler->filter('form'));
     }
+
+    public function testSubmitFormOk()
+    {
+        $client = new Client();
+        $crawler = $client->request('GET', 'http://localhost');
+        $form = $crawler->selectButton('OK')->form();
+        $crawler = $client->submit($form);
+        $this->assertEquals(200, $client->getResponse()->getStatus());
+        $this->assertEquals('Data successfully submitted', $crawler->filter('.message')->text());
+    }
 }
