@@ -5,7 +5,7 @@ namespace SimpleForm\Tests;
 
 use Goutte\Client;
 
-class BasicTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
     public function testFormIsDisplayed()
     {
