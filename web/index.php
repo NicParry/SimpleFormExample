@@ -2,10 +2,9 @@
 
 use SimpleForm\Controller\BasicController;
 
-define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(dirname(__FILE__)));
+require_once('../src/bootstrap.php');
 
-require_once(ROOT . DS . 'vendor' . DS . 'autoload.php');
+require_once(ROOT . '/vendor/autoload.php');
 
 $templateEngine = new \SimpleForm\Template\TemplateEngine();
 $personRepo = new \SimpleForm\Entity\PersonRepo();

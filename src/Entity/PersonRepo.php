@@ -14,7 +14,7 @@ class PersonRepo
     public function getAllPeople()
     {
         $people = [];
-        $fileContents = file_get_contents(ROOT . DS . 'src' . DS . 'Entity' . DS . 'people-store.csv');
+        $fileContents = file_get_contents(ROOT . '/src/Entity/people-store.csv');
         $lines = explode("\n", $fileContents);
         for ($i = 0; $i < count($lines) - 1; $i++) {
             $line = $lines[$i];
@@ -30,7 +30,7 @@ class PersonRepo
      */
     public function savePeople($people)
     {
-        $fh = fopen(ROOT . DS . 'src' . DS . 'Entity' . DS . 'people-store.csv', "w");
+        $fh = fopen(ROOT . '/src/Entity/people-store.csv', "w");
         foreach ($people as $person)
         {
             fputcsv($fh, array($person->getFirstName(), $person->getSurname()), ',');

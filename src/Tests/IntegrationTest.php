@@ -4,11 +4,14 @@ namespace SimpleForm\Tests;
 
 
 use Goutte\Client;
+use SimpleForm\Entity\Person;
+use SimpleForm\Entity\PersonRepo;
 
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        require_once('../bootstrap.php');
         $this->setUpFixtures();
     }
 
@@ -70,16 +73,14 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     private function setUpFixtures()
     {
         $people = [
-            ['Leonard', 'Hofstader'],
-            ['Sheldon', 'Cooper'],
-            ['Raj', 'Koothrapali'],
-            ['Howard', 'Wolowitz'],
-            ['Penny', ''],
+            new Person('Leonard', 'Hofstader'),
+            new Person('Sheldon', 'Cooper'),
+            new Person('Raj', 'Koothrapali'),
+            new Person('Howard', 'Wolowitz'),
+            new Person('Penny', ''),
         ];
 
-        $fh = fopen('/vagrant/src/Entity/people-store.csv', "w");
-        foreach ($people as $person) {
-            fputcsv($fh, array($person[0], $person[1]), ',');
-        }
+        $repo = new PersonRepo();
+        $repo->savePeople($people);
     }
 }
