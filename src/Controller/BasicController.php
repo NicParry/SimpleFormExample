@@ -4,9 +4,26 @@ namespace SimpleForm\Controller;
 
 
 use SimpleForm\Entity\Person;
+use SimpleForm\Entity\PersonRepo;
+use SimpleForm\Template\TemplateEngine;
 
 class BasicController
 {
+    /**
+     * @var TemplateEngine
+     */
+    private $template;
+    /**
+     * @var PersonRepo
+     */
+    private $repo;
+
+    public function __construct(TemplateEngine $templateEngine, PersonRepo $repo)
+    {
+        $this->template = $templateEngine;
+        $this->repo = $repo;
+    }
+
     public function formAction($method, $formData = array())
     {
         if ($method === 'POST') {
@@ -28,6 +45,6 @@ class BasicController
                 $people[] = new Person($attr[0], $attr[1]);
             }
         }
-        include(ROOT . DS . 'src' . DS . 'views' . DS . 'basic-input-form.php');
+        $this->template->render('basic-input-form', array('message' => $message, 'people' => $people));
     }
 }
