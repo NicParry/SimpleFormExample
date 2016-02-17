@@ -7,11 +7,38 @@ use Goutte\Client;
 
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        $this->setUpFixtures();
+    }
+
     public function testFormIsDisplayed()
     {
         $client = new Client();
         $crawler = $client->request('GET', 'http://localhost');
         $this->assertCount(1, $crawler->filter('form'));
+    }
+
+    public function testFormValuesAreDerivedFromFile()
+    {
+        $client = new Client();
+        $crawler = $client->request('GET', 'http://localhost');
+        $form = $crawler->selectButton('OK')->form();
+        $values = $form->getValues();
+        $this->assertEquals('Leonard', $values['people[0][firstname]']);
+        $this->assertEquals('Hofstader', $values['people[0][surname]']);
+
+        $this->assertEquals('Sheldon', $values['people[1][firstname]']);
+        $this->assertEquals('Cooper', $values['people[1][surname]']);
+
+        $this->assertEquals('Raj', $values['people[2][firstname]']);
+        $this->assertEquals('Koothrapali', $values['people[2][surname]']);
+
+        $this->assertEquals('Howard', $values['people[3][firstname]']);
+        $this->assertEquals('Wolowitz', $values['people[3][surname]']);
+
+        $this->assertEquals('Penny', $values['people[4][firstname]']);
+        $this->assertEquals('', $values['people[4][surname]']);
     }
 
     public function testSubmitFormOk()
@@ -40,25 +67,19 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Winkle', $values['people[0][surname]']);
     }
 
-    public function testFormValuesAreDerivedFromFile()
+    private function setUpFixtures()
     {
-        $client = new Client();
-        $crawler = $client->request('GET', 'http://localhost');
-        $form = $crawler->selectButton('OK')->form();
-        $values = $form->getValues();
-        $this->assertEquals('Leonard', $values['people[0][firstname]']);
-        $this->assertEquals('Hofstader', $values['people[0][surname]']);
+        $people = [
+            ['Leonard', 'Hofstader'],
+            ['Sheldon', 'Cooper'],
+            ['Raj', 'Koothrapali'],
+            ['Howard', 'Wolowitz'],
+            ['Penny', ''],
+        ];
 
-        $this->assertEquals('Sheldon', $values['people[0][firstname]']);
-        $this->assertEquals('Cooper', $values['people[0][surname]']);
-
-        $this->assertEquals('Raj', $values['people[0][firstname]']);
-        $this->assertEquals('Koothrapali', $values['people[0][surname]']);
-
-        $this->assertEquals('Howard', $values['people[0][firstname]']);
-        $this->assertEquals('Wolowitz', $values['people[0][surname]']);
-
-        $this->assertEquals('Penny', $values['people[0][firstname]']);
-        $this->assertEquals('', $values['people[0][surname]']);
+        $fh = fopen('/vagrant/src/Entity/people-store.csv', "w");
+        foreach ($people as $person) {
+            fputcsv($fh, array($person[0], $person[1]), ',');
+        }
     }
 }
